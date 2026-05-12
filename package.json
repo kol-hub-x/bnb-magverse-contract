@@ -12,10 +12,12 @@
     "clean": "hardhat clean",
     "deploy:bsc-testnet": "hardhat run scripts/deploy.js --network bscTestnet",
     "deploy:bsc-mainnet": "hardhat run scripts/deploy.js --network bscMainnet",
-    "verify": "hardhat verify"
+    "verify": "hardhat verify",
+    "verify:sourcify": "hardhat verify:sourcify"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-verify": "2.1.3",
     "@openzeppelin/contracts-upgradeable": "^5.4.0",
     "@openzeppelin/hardhat-upgrades": "^3.9.1",
     "dotenv": "^16.4.7",

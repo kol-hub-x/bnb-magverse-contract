@@ -34,7 +34,9 @@ Edit `.env` (never commit real keys):
 - `PRIVATE_KEY` — deployer private key.
 - `BSC_TESTNET_RPC_URL` — JSON-RPC for BSC testnet deploys.
 - `BSC_MAINNET_RPC_URL` — JSON-RPC for BSC mainnet deploys.
-- `BSCSCAN_API_KEY` — from [BscScan API keys](https://bscscan.com/myapikey).
+- `ETHERSCAN_API_KEY` — multichain key from [Etherscan API dashboard](https://etherscan.io/apidashboard), required for `hardhat verify` (uses [Etherscan API v2](https://docs.etherscan.io/v2-migration) with `chainid`; a **single string** `apiKey` in config — do not use a per-network key object or verification falls back to deprecated explorer V1 URLs).
+
+Sourcify is enabled in `hardhat.config.cjs` as an additional verification path (no key).
 
 Compile:
 
@@ -65,9 +67,20 @@ The script prints:
 
 Optional: set `INITIAL_VERSION` in `.env` before deploy to override the default `1.0.0` passed to `initialize(address,string)`.
 
-## Verification (BscScan)
+## Verification (Etherscan v2 + BscScan UI)
 
 After deployment, verify the **implementation** contract first (the address labeled “Implementation” in the deploy logs). Replace placeholders with your values.
+
+Ensure `.env` has **`ETHERSCAN_API_KEY`** (Etherscan multichain key). Hardhat `2.1.3+` `@nomicfoundation/hardhat-verify` uses `https://api.etherscan.io/v2/api` with `chainid` when `etherscan.apiKey` is a **string**; using an **object** of per-explorer keys forces legacy `https://api-testnet.bscscan.com/api` style calls, which BscScan now rejects as deprecated V1.
+
+If `api.etherscan.io` times out from your network, try `NODE_OPTIONS=--dns-result-order=ipv4first`, a different network/VPN, or verify from CI; Sourcify may also succeed with `sourcify.enabled: true`.
+
+When Sourcify reports **already verified** / **full_match**, your implementation bytecode is already publicly reproducible on [Sourcify repo](https://repo.sourcify.dev/) even if Etherscan times out. For a clean CLI exit without hitting Etherscan, either:
+
+- run only Sourcify: `npx hardhat verify:sourcify --network bscTestnet <IMPLEMENTATION_ADDRESS>`, or  
+- set `DISABLE_ETHERSCAN_VERIFY=true` in `.env` and run `npx hardhat verify --network bscTestnet <IMPLEMENTATION_ADDRESS>` (skips Etherscan subtask; Sourcify still runs).
+
+BscScan’s in-page “Verified” badge may still require a successful Etherscan-route submission or their UI import flow when your network can reach `api.etherscan.io`.
 
 **Testnet**
 
