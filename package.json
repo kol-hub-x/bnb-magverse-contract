@@ -1,0 +1,24 @@
+{
+  "name": "bnb-magverse-contract",
+  "version": "1.0.0",
+  "private": true,
+  "description": "UUPS upgradeable contracts for BNB Smart Chain (BscEnrollment reference implementation)",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "type": "module",
+  "scripts": {
+    "compile": "hardhat compile",
+    "clean": "hardhat clean",
+    "deploy:bsc-testnet": "hardhat run scripts/deploy.js --network bscTestnet",
+    "deploy:bsc-mainnet": "hardhat run scripts/deploy.js --network bscMainnet",
+    "verify": "hardhat verify"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts-upgradeable": "^5.4.0",
+    "@openzeppelin/hardhat-upgrades": "^3.9.1",
+    "dotenv": "^16.4.7",
+    "hardhat": "^2.26.0"
+  }
+}
